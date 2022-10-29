@@ -24,6 +24,5 @@ axis([100 10000 0 50])
 legend
 
 
-
 xlabel('Frequency,Hz')
 ylabel('ContrastPerformance,dB')

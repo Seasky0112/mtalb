@@ -1,5 +1,5 @@
 
-function [F,A]=PM_AE(D,df)
+function [F,AE]=PM_AE(D,df)
 %[F,A]=PM(D,df),声场采样点为波长的1/2
 
 
@@ -32,7 +32,7 @@ ys=[y1 y1+ds y1+2*ds y1+3*ds y1 y1+ds y1+2*ds y1+3*ds]; %声源y坐标向量
 zs=ones(1,8)*1.3;   %声源z坐标向量
 nf=length(f0:df:fe);
 F=zeros(nf,1);  %存储频率向量
-A=zeros(nf,1);  %存储声学对比度向量
+AE=zeros(nf,1);  %存储声学对比度向量
 m=1;
 
 for f=f0:df:fe
@@ -94,23 +94,9 @@ for f=f0:df:fe
 
     q=inv(Gb'*Gb+Gd'*Gd)*Gb'*pbt;
 
-
-
-    %%求解激励向量
-    %不控制信号源激励，lambda_L=0
-
-    pb=Gb*q;
-    p_ave=sum(pb)/length(pb);
-
-    q_ref=inv(Gb)*p_ave;
-
-    
-
-
-
     
     F(m)=f;
-    A(m)=10*log10(ACC);
+    AE(m)=q'*q;
     m=m+1;
     [num2str((f-f0)/(fe-f0)*100) '%']
 
