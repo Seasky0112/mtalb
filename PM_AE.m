@@ -96,7 +96,7 @@ for f=f0:df:fe
 
     
     F(m)=f;
-    AE(m)=q'*q;
+    AE(m)=10*log10(q'*q);
     m=m+1;
     [num2str((f-f0)/(fe-f0)*100) '%']
 
