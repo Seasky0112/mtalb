@@ -93,10 +93,10 @@ for f=f0:df:fe
     %求目标压力，lambda_L正比于q
     q0=[0.5 0.5 0.5 0.5 0 0 0 0]';  %求解参考压力时的声源输入向量
     pbt=Gb*q0;  %亮区目标压力
+    pbt_abs=abs(pbt);
+    q=inv(Gb'*Gb+Gd'*Gd+0.5)*Gb'*pbt;
 
-    q=inv(Gb'*Gb+Gd'*Gd)*Gb'*pbt;
-
-
+    pb_abs=abs(Gb*q);
 
     %%求解激励向量
     %不控制信号源激励，lambda2=0
