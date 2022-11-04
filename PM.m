@@ -1,5 +1,5 @@
 
-function [F,A]=PM(D,df)
+function [F,ACC,AE]=PM(D,df)
 %[F,A]=PM(D,df),声场采样点为波长的1/2
 
 % D=0.4;  %声源x间距
@@ -34,7 +34,8 @@ ys=[y1 y1+ds y1+2*ds y1+3*ds y1 y1+ds y1+2*ds y1+3*ds]; %声源y坐标向量
 zs=ones(1,8)*1.3;   %声源z坐标向量
 nf=length(f0:df:fe);
 F=zeros(nf,1);  %存储频率向量
-A=zeros(nf,1);  %存储声学对比度向量
+ACC=zeros(nf,1);  %存储声学对比度向量
+AE=zeros(nf,1); %存储Array Effort
 m=1;
 
 for f=f0:df:fe
@@ -93,25 +94,13 @@ for f=f0:df:fe
     %求目标压力，lambda_L正比于q
     q0=[0.5 0.5 0.5 0.5 0 0 0 0]';  %求解参考压力时的声源输入向量
     pbt=Gb*q0;  %亮区目标压力
-    pbt_abs=abs(pbt);
-    q=inv(Gb'*Gb+Gd'*Gd+0.5)*Gb'*pbt;
 
-    pb_abs=abs(Gb*q);
+    q=inv(Gb'*Gb+Gd'*Gd)*Gb'*pbt;
 
-    %%求解激励向量
-    %不控制信号源激励，lambda2=0
-
-%     M=inv(Rd)*Rb;
-%     [V,E] = eig(M);
-%     T=M*V-V*E;  %特征向量构成的矩阵
-%     eigen = diag(E);    %特征值构成的向量
-%     [eigenmax,I]=max(eigen);    %最大特征值
-%     q=(V(:,I));     %最大特征值对应的特征向量
-    
-    ACC=(q'*Rb*q)/(q'*Rd*q);    %声学对比度
+    AE(m)=10*log10(q'*q);
+    ACC(m)=10*log10((q'*Rb*q)/(q'*Rd*q));    %声学对比度
     
     F(m)=f;
-    A(m)=10*log10(ACC);
     m=m+1;
     [num2str((f-f0)/(fe-f0)*100) '%']
 
