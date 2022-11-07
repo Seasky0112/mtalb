@@ -1,41 +1,47 @@
-``%%%%%%%%%%%%%          4.0版本
+%%%%%%%%%%%%%          4.0版本
 %%%%%%%%%%%%%          均匀圆阵,完整版，包括水平、俯仰与三维
 
 clear;
 close all;
 clc;
-80
 N = 36; %阵元数
 c = 340;  %光速
 f = 8000; %频率
 lambda = c/f;
-theta = linspace(0,90,45);    %
-phi = linspace(0,90,45);
+theta = linspace(0,pi,180);    %
+phi = linspace(0,2*pi,360);
 phi0 = 180; %角度
 theta0 = 90;    %角度
 phin = 2*pi/N;  %间隔
 
-F1 = zeros(1,45*45);   %存储结果
-ele=zeros(1,45*45);
-azi=zeros(1,45*45);
+F1 = zeros(1,180*360);   %存储结果
+ele=zeros(1,180*360);
+azi=zeros(1,180*360);
 m=1;
-for ii = 1:45
-    for jj = 1:45
+for ii = 1:360
+    for jj = 1:180
         %坐标转换
         [x,y,z]=sph2cart(phi(ii),theta(jj),2);
         %求解声压
-        F1(m)=Transfer(0,0,0,x,y,z,8000);
+        F1(m)=abs(Transfer(0,0,0,x,y,z,8000));
         ele(m)=theta(jj);
         azi(m)=phi(ii);
         m=m+1;
     end
 end
+F1=F1/max(F1);
+% ele
+% azi
 
-[X,Y,Z]=sph2cart(azi,ele,F1);
-meshgrid(X,Y);
+Ele=reshape(ele,[180 360]);
+Azi=reshape(azi,[180 360]);
+F1=reshape(F1,[180 360]);
+
+[X,Y,Z]=sph2cart(Azi,Ele,F1);
+
 mesh(X,Y,Z);
-
-
+figure
+surf(X,Y,Z);
 
 % F1 = 20*log10(abs(F1)/max(max(abs(F1))));
 % 
