@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%          均匀圆阵,完整版，包括水平、俯仰与三维
 
 clear;
-close all;
+% close all;
 clc;
 N = 36; %阵元数
 c = 340;  %光速
@@ -36,12 +36,22 @@ F1=F1/max(F1);
 Ele=reshape(ele,[180 360]);
 Azi=reshape(azi,[180 360]);
 F1=reshape(F1,[180 360]);
+figure
+polarplot(Ele(:,1),F1(:,360/2));
+figure
+polarplot(Azi(1,:),F1(180/2,:));
+
 
 [X,Y,Z]=sph2cart(Azi,Ele,F1);
-
-mesh(X,Y,Z);
 figure
-surf(X,Y,Z);
+mesh(X,Y,Z);
+
+
+
+% x1=X
+
+
+
 
 % F1 = 20*log10(abs(F1)/max(max(abs(F1))));
 % 
